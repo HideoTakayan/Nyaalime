@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Nyaalime - Thông tin Anime</title>
+    <meta name="description" content="Thông tin chi tiết về anime/movie, bao gồm trailer, thể loại, ngày phát hành và tóm tắt nội dung.">
+    <meta name="keywords" content="anime, movie, trailer, synopsis, Nyaalime">
+    <meta name="author" content="Nyaalime">
+
+    <!-- Favicon -->
+    <link rel="shortcut icon" href="img/nyaalime.png" type="image/png">
+
+    <!-- CSS -->
+    <link rel="stylesheet" href="css/app.css">
+
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+</head>
+<body>
+    <!-- Header -->
+    <header>
+        <a href="./" class="logo">
+            <img decoding="async" src="./img/icon.png" alt="Nyaalime Logo" loading="lazy">
+        </a>
+    </header>
+
+    <!-- Banner chính -->
+    <div class="banner">
+        <div class="overlay">
+            <img decoding="async" id="bposter" src="img/bg.webp" class="bg" alt="Movie Background" loading="lazy">
+        </div>
+        <div class="content">
+            <h2 id="movie-title">Wonder Egg Priority</h2>
+            <h4>
+                <span id="date">2023</span>
+                <span><i>16+</i></span>
+                <span id="genre">Hành động</span>
+            </h4>
+            <p id="movie-synopsis">
+                Sau cái chết của người bạn thân duy nhất Koito Nagase, Ai Ooto phải đối mặt với thực tại mới...
+            </p>
+
+            <!-- Nút hành động -->
+            <div class="buttons">
+                <a href="#" id="url">
+                    <i class="fa fa-play" aria-hidden="true"></i> Xem
+                </a>
+                <a href="https://myanimelist.net/" target="_blank" rel="noopener noreferrer">
+                    <i class="fa fa-plus" aria-hidden="true"></i> Danh sách
+                </a>
+            </div>
+        </div>
+
+        <!-- Trailer -->
+        <a class="play" id="movie-trailer" href="https://youtube.com" target="_blank" rel="noopener noreferrer">
+            <img decoding="async" src="img/play.png" alt="Xem Trailer" loading="lazy"> Xem Trailer
+        </a>
+    </div>
+
+    <!-- JS -->
+    <script src="scripts/main.js" defer></script>
+    <script>
+        async function fetchMovieData() {
+            try {
+                const response = await fetch('db/movie.json');
+                if (!response.ok) throw new Error("Không thể load dữ liệu movie.");
+                const data = await response.json();
+
+                const params = new URLSearchParams(window.location.search);
+                const movieId = parseInt(params.get("id"));
+
+                const movie = data.find(m => m.id === movieId);
+
+                if (movie) {
+                    document.getElementById("date").textContent = movie.date;
+                    document.getElementById("genre").textContent = movie.genre;
+                    document.getElementById("movie-title").textContent = movie.name;
+                    document.getElementById("movie-synopsis").textContent = movie.synopsis;
+
+                    const urlElement = document.getElementById('url');
+                    urlElement.href = movie.url;
+
+                    const backgroundPoster = document.getElementById("bposter");
+                    backgroundPoster.src = movie.bposter;
+                    backgroundPoster.alt = `${movie.name} Poster`;
+
+                    const trailerLink = document.getElementById("movie-trailer");
+                    trailerLink.href = movie.trailer;
+                } else {
+                    console.warn("❌ Không tìm thấy movie với ID này.");
+                }
+            } catch (error) {
+                console.error("Lỗi khi load dữ liệu movie:", error);
+            }
+        }
+
+        fetchMovieData();
+    </script>
+</body>
+</html>

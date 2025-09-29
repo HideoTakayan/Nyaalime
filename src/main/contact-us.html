@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Contact Us - Nyaalime</title>
+  <link rel="shortcut icon" href="img/nyaalime.png" type="image/png">
+
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: 'Poppins', sans-serif;
+    }
+
+    body {
+      background: #000;
+      color: #fff;
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+    }
+
+    .contact-form {
+      width: 100%;
+      max-width: 900px;
+      background: #111;
+      border-radius: 10px;
+      overflow: hidden;
+      display: flex;
+      flex-wrap: wrap;
+      box-shadow: 0 0 30px rgba(0,0,0,0.5);
+    }
+
+    .contact-form .form-left,
+    .contact-form .form-right {
+      flex: 1 1 50%;
+      padding: 40px;
+    }
+
+    .contact-form .form-left {
+      background: #1a1a1a;
+    }
+
+    .contact-form h1 {
+      font-size: 2rem;
+      margin-bottom: 20px;
+      color: #14bac2;
+      text-align: center;
+    }
+
+    .contact-form h2 {
+      font-size: 1.5rem;
+      margin-bottom: 15px;
+      color: #fff;
+      text-align: center;
+    }
+
+    .contact-form form input,
+    .contact-form form textarea {
+      width: 100%;
+      padding: 12px 15px;
+      margin-bottom: 15px;
+      border: none;
+      border-radius: 25px;
+      outline: none;
+      background: #222;
+      color: #fff;
+      transition: 0.3s ease;
+    }
+
+    .contact-form form input:focus,
+    .contact-form form textarea:focus {
+      border: 1px solid #14bac2;
+      background: transparent;
+    }
+
+    .contact-form form textarea {
+      resize: vertical;
+      min-height: 120px;
+    }
+
+    .contact-form button {
+      width: 100%;
+      padding: 12px;
+      border: none;
+      border-radius: 25px;
+      background: #14bac2;
+      color: #fff;
+      font-size: 1rem;
+      cursor: pointer;
+      transition: 0.3s ease;
+    }
+
+    .contact-form button:hover {
+      background: #0fa8aa;
+    }
+
+    .contact-form .form-right img {
+      width: 100%;
+      border-radius: 10px;
+      display: block;
+    }
+
+    @media (max-width: 768px) {
+      .contact-form {
+        flex-direction: column;
+      }
+
+      .contact-form .form-left,
+      .contact-form .form-right {
+        flex: 1 1 100%;
+        padding: 20px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="contact-form">
+    <div class="form-left">
+      <h1>Need Assistance?</h1>
+      <h2>Contact Us</h2>
+      <form action="https://formsubmit.co/576756dee42da8564c94c32f4fe8c32c" method="POST">
+        <input type="text" name="name" placeholder="Enter Your Name" required>
+        <input type="email" name="email" placeholder="Enter Your Email" required>
+        <textarea name="message" placeholder="Your Message" required></textarea>
+        <input type="hidden" name="_captcha" value="false">
+        <button type="submit">Send <i class="fas fa-paper-plane"></i></button>
+      </form>
+    </div>
+    <div class="form-right">
+         <img src="../../img/contact-us.png" alt="Contact Us">
+    </div>
+  </div>
+</body>
+</html>

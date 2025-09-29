@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="icon" href="../img/nyaalime.png" type="image/png">
+  <title>Nyaalime</title>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../css/home.css">
+</head>
+<body>
+  <header>
+    <img src="../img/icon.png" alt="Nyaalime Logo">
+  </header>
+  <div class="container">
+    <div class="episode-list">
+      <h2>Weathering With You</h2>
+      <h3>Episode List</h3>
+      <ul id="episode-list-ul">
+      </ul>
+    </div>
+    <div class="video-container">
+      <iframe id="video-iframe" class="res" frameborder="0" allowfullscreen></iframe>
+    </div>
+  </div>
+  <script>
+    const episodeList = document.getElementById('episode-list-ul');
+    const videoIframe = document.getElementById('video-iframe');
+    const params = new URLSearchParams(window.location.search);
+    const movieId = parseInt(params.get("id"));
+    fetch('../db/movie_10.json')
+      .then(response => response.json())
+      .then(data => {
+        data.forEach((episode) => {
+          const listItem = document.createElement('li');
+          listItem.textContent = episode.name;
+          listItem.addEventListener('click', () => {
+            document.querySelectorAll('.episode-list li').forEach(item => {
+              item.classList.remove('playing');
+            });
+            listItem.classList.add('playing');
+            videoIframe.src = episode.link;
+          });
+          episodeList.appendChild(listItem);
+        });
+      })
+      .catch(error => {
+        console.error('Error fetching episode data:', error);
+      });
+  </script>
+</body>
+</html>

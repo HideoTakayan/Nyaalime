@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Compatibility Error</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            background: linear-gradient(135deg, #f4f4f4, #e0e0e0);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            font-family: Arial, sans-serif;
+        }
+
+        .message {
+            text-align: center;
+            max-width: 90%;
+            padding: 30px 20px;
+            border-radius: 12px;
+            background-color: #fff;
+            box-shadow: 0 8px 20px rgba(0,0,0,0.2);
+        }
+
+        .message p {
+            font-size: 1.5rem;
+            color: #333;
+            margin: 15px 0;
+        }
+
+        .message .nyaalime {
+            text-decoration: underline;
+            font-weight: bold;
+            color: #0079ff;
+        }
+
+        @media (max-width: 480px) {
+            .message p {
+                font-size: 1.2rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="message">
+        <p>Compatibility Error!</p>
+        <p><span class="nyaalime">Nyaalime</span> is available for only desktop browsers currently.</p>
+    </div>
+</body>
+</html>

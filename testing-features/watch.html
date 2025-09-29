@@ -1,0 +1,234 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <!-- SEO cơ bản -->
+    <title>Nyaalime - Thông tin Anime/Phim</title>
+    <meta name="description" content="Thông tin chi tiết về anime/phim, bao gồm trailer, thể loại, ngày phát hành và tóm tắt nội dung.">
+    <meta name="keywords" content="anime, phim, trailer, tóm tắt, Nyaalime">
+    <meta name="author" content="Nyaalime">
+
+    <!-- Favicon -->
+    <link rel="shortcut icon" href="img/nyaalime.png" type="image/png">
+
+    <!-- CSS -->
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: Arial, sans-serif;
+            background-color: #000;
+            color: #fff;
+        }
+
+        a {
+            color: inherit;
+            text-decoration: none;
+        }
+
+        /* Header */
+        header {
+            padding: 10px 20px;
+            background-color: #111;
+            display: flex;
+            align-items: center;
+        }
+        header .logo img {
+            width: 120px;
+            height: auto;
+        }
+
+        /* Banner */
+        .banner {
+            position: relative;
+            width: 100%;
+            min-height: 70vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            overflow: hidden;
+            text-align: center;
+            background-color: #111;
+        }
+
+        .banner .overlay {
+            position: absolute;
+            inset: 0;
+            background: rgba(0,0,0,0.5);
+            z-index: 1;
+        }
+
+        .banner .overlay img.bg {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            position: absolute;
+            top: 0;
+            left: 0;
+            z-index: 0;
+        }
+
+        .banner .content {
+            position: relative;
+            z-index: 2;
+            max-width: 800px;
+            padding: 20px;
+        }
+
+        .banner h2 {
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+        }
+
+        .banner h4 {
+            font-size: 1.1rem;
+            margin-bottom: 15px;
+        }
+
+        .banner h4 span {
+            margin-right: 15px;
+        }
+
+        .banner p {
+            font-size: 1rem;
+            line-height: 1.6;
+            margin-bottom: 20px;
+        }
+
+        .banner .buttons a {
+            display: inline-block;
+            margin: 5px 10px;
+            padding: 10px 20px;
+            background: linear-gradient(90deg, #00bdff, #0079ff);
+            border-radius: 5px;
+            font-weight: bold;
+            transition: transform .3s, opacity .3s;
+        }
+
+        .banner .buttons a:hover {
+            transform: scale(1.05);
+            opacity: 0.9;
+        }
+
+        /* Trailer link */
+        .banner a.play {
+            display: inline-flex;
+            align-items: center;
+            margin-top: 15px;
+            padding: 8px 15px;
+            background-color: rgba(255,255,255,0.1);
+            border-radius: 5px;
+            transition: transform .3s, opacity .3s;
+        }
+        .banner a.play:hover {
+            transform: scale(1.05);
+            opacity: 0.9;
+        }
+        .banner a.play img {
+            width: 24px;
+            height: 24px;
+            margin-right: 8px;
+        }
+
+        /* Responsive */
+        @media screen and (max-width: 768px) {
+            .banner h2 { font-size: 1.8rem; }
+            .banner h4 { font-size: 0.9rem; }
+            .banner p { font-size: 0.9rem; }
+            .banner .buttons a { padding: 8px 15px; font-size: 0.9rem; }
+        }
+    </style>
+
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+</head>
+<body>
+    <!-- Header -->
+    <header>
+        <a href="./" class="logo">
+            <img decoding="async" src="./img/icon.png" alt="Logo Nyaalime" loading="lazy">
+        </a>
+    </header>
+
+    <!-- Banner -->
+    <div class="banner">
+        <div class="overlay">
+            <img decoding="async" id="bposter" src="img/bg.webp" class="bg" alt="Hình nền phim" loading="lazy">
+        </div>
+        <div class="content">
+            <h2 id="movie-title">Tên Phim/Anime</h2>
+            <h4>
+                <span id="date">2023</span>
+                <span><i>16+</i></span>
+                <span id="genre">Thể loại</span>
+            </h4>
+            <p id="movie-synopsis">Tóm tắt nội dung phim/anime sẽ hiển thị ở đây...</p>
+
+            <!-- Nút hành động -->
+            <div class="buttons">
+                <a href="#" id="url">
+                    <i class="fa fa-play" aria-hidden="true"></i> Xem ngay
+                </a>
+                <a href="https://myanimelist.net/" target="_blank" rel="noopener noreferrer">
+                    <i class="fa fa-plus" aria-hidden="true"></i> Thêm vào danh sách
+                </a>
+            </div>
+        </div>
+
+        <!-- Trailer -->
+        <a class="play" id="movie-trailer" href="#" target="_blank" rel="noopener noreferrer">
+            <img decoding="async" src="img/play.png" alt="Xem Trailer" loading="lazy"> Xem Trailer
+        </a>
+    </div>
+
+    <!-- JS -->
+    <script>
+        async function fetchMovieData() {
+            try {
+                const response = await fetch('db/movie.json');
+                if (!response.ok) throw new Error("Không thể tải dữ liệu phim/anime.");
+                const data = await response.json();
+
+                const params = new URLSearchParams(window.location.search);
+                const movieIdParam = params.get("id");
+                if (!movieIdParam) return console.warn("Không có ID phim/anime trong URL.");
+                const movieId = parseInt(movieIdParam);
+                if (isNaN(movieId)) return console.warn("ID phim/anime không hợp lệ.");
+
+                const movie = data.find(m => m.id === movieId);
+                if (!movie) {
+                    console.warn("❌ Không tìm thấy phim/anime với ID này.");
+                    return;
+                }
+
+                // Cache element
+                const elTitle = document.getElementById("movie-title");
+                const elDate = document.getElementById("date");
+                const elGenre = document.getElementById("genre");
+                const elSynopsis = document.getElementById("movie-synopsis");
+                const elPlay = document.getElementById("url");
+                const elPoster = document.getElementById("bposter");
+                const elTrailer = document.getElementById("movie-trailer");
+
+                elTitle.textContent = movie.name || "Tên không xác định";
+                elDate.textContent = movie.date || "N/A";
+                elGenre.textContent = movie.genre || "N/A";
+                elSynopsis.textContent = movie.synopsis || "Chưa có tóm tắt.";
+                elPlay.href = movie.url || "#";
+                elPoster.src = movie.bposter || 'img/bg.webp';
+                elPoster.alt = `${movie.name || 'Phim/Anime'} Poster`;
+                elTrailer.href = movie.trailer || "#";
+
+            } catch (error) {
+                console.error("Lỗi khi tải dữ liệu phim/anime:", error);
+            }
+        }
+
+        fetchMovieData();
+    </script>
+</body>
+</html>

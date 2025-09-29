@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Nyaalime - Anime Search</title>
+<style>
+  .search-container {
+    margin-top: 50px;
+    text-align: center;
+  }
+  .search-input {
+    padding: 10px;
+    width: 200px;
+    border-radius: 5px;
+    border: 1px solid #ccc;
+    font-size: 16px;
+    outline: none;
+  }
+  .search-button {
+    padding: 10px 20px;
+    border: none;
+    background-color: #007bff;
+    color: #fff;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 16px;
+    margin-left: 10px;
+  }
+  .search-button:hover {
+    background-color: #0056b3;
+  }
+  .results-container {
+    margin-top: 20px;
+    text-align: center;
+  }
+  .result {
+    margin-top: 20px;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    display: flex;
+    align-items: center;
+    cursor: pointer;
+    transition: background 0.2s;
+  }
+  .result:hover {
+    background: #f2f2f2;
+  }
+  .result img {
+    width: 100px;
+    border-radius: 5px;
+    margin-right: 20px;
+  }
+  .result-info {
+    text-align: left;
+    font-family: Arial, sans-serif;
+  }
+</style>
+</head>
+<body>
+  <div class="search-container">
+    <input type="text" id="searchInput" class="search-input" placeholder="Enter anime name...">
+    <button id="searchButton" class="search-button">Search</button>
+  </div>
+  <div class="results-container" id="resultsContainer">
+  </div>
+
+  <script>
+    let typingTimer;
+    const doneTypingInterval = 500;
+    const resultsContainer = document.getElementById('resultsContainer');
+
+    function fetchAnimeResults(searchInput) {
+      fetch('https://nyaalime-backend.vercel.app/api/v2/search', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Accept': 'application/json'
+        },
+        body: JSON.stringify({ search: searchInput })
+      })
+      .then(response => response.json())
+      .then(data => {
+        resultsContainer.innerHTML = '';
+        if (data?.results?.length > 0) {
+          data.results.forEach(result => {
+            if (
+              result.format !== 'MANGA' &&
+              ['RELEASING', 'FINISHED'].includes(result.status)
+            ) {
+              const resultDiv = document.createElement('div');
+              resultDiv.classList.add('result');
+              resultDiv.innerHTML = `
+                <img src="${result.coverImage.large}" alt="Cover Image">
+                <div class="result-info">
+                  <h3>${result.title.english || result.title.userPreferred || 'No title'}</h3>
+                  <p style="font-size: 90%; color: gray;">${result.title.userPreferred || ''}</p>
+                  <p>Year: ${result.seasonYear || 'Unknown'} &nbsp; &#9733; ${(result.averageScore || 0) / 10}</p>
+                </div>
+              `;
+              resultDiv.addEventListener('click', () => {
+                window.location.href = `info_page.html?id=${result.id}`;
+              });
+              resultsContainer.appendChild(resultDiv);
+            }
+          });
+        } else {
+          resultsContainer.innerHTML = '<p>No results found</p>';
+        }
+      })
+      .catch(error => {
+        console.error('Error:', error);
+        resultsContainer.innerHTML = '<p>An error occurred. Please try again later.</p>';
+      });
+    }
+
+    document.getElementById('searchInput').addEventListener('keyup', () => {
+      clearTimeout(typingTimer);
+      typingTimer = setTimeout(() => {
+        const searchInput = document.getElementById('searchInput').value.trim();
+        if (searchInput) fetchAnimeResults(searchInput);
+      }, doneTypingInterval);
+    });
+
+    document.getElementById('searchButton').addEventListener('click', () => {
+      const searchInput = document.getElementById('searchInput').value.trim();
+      if (searchInput) fetchAnimeResults(searchInput);
+    });
+  </script>
+</body>
+</html>
